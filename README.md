@@ -5,33 +5,34 @@ class Course():
         self.name = name
         self.students = []
         self.max_students = max_students
-        self.teacher = ''   
+        self.teacher = ''
+        
 
-  def add_student(self, student_name):
-      """добавляет студента на курс"""
-      if len(self.students) <= self.max_students:
-          self.students.append(student_name)
-          print(f"{student_name} добавлен(a) на курс {self.name}")
-      else:
-          print("Курс уже полон, невозможно добавить")
-
-
-  def remove_student(self, student_name):
-    """удаляет студента"""
-      if student_name in self.students:
-          self.students.remove(student_name)
-          print(f"{student_name} удален(a) из курса {self.name}")
+    def add_student(self, student_name):
+        """добавляет студента на курс"""
+        if len(self.students) <= self.max_students:
+            self.students.append(student_name)
+            print(f"{student_name} добавлен(a) на курс {self.name}")
+        else:
+            print("Курс уже полон, невозможно добавить")
 
 
-  def get_student_list(self):
-    """список студентов"""
-      return self.students
+    def remove_student(self, student_name):
+        """удаляет студента"""
+        if student_name in self.students:
+            self.students.remove(student_name)
+            print(f"{student_name} удален(a) из курса {self.name}")
+
+
+    def get_student_list(self):
+        """список студентов"""
+        return self.students
     
 
-  def set_teacher(self, teacher_name):
-      """назначение преподавателя"""
-      self.teacher = teacher_name
-      print(f"Преподаватель {teacher_name} назначен(a) на курс {self.name}")
+    def set_teacher(self, teacher_name):
+        """назначение преподавателя"""
+        self.teacher = teacher_name
+        print(f"Преподаватель {teacher_name} назначен(a) на курс {self.name}")
 
 python_course = Course('Поколение Python', 10)
 math_course = Course('Математика', 5)
