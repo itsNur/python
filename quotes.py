@@ -1,48 +1,46 @@
+import pandas as pd
+from yandexfreetranslate import YandexFreeTranslate 
 import requests
-from openpyxl import load_workbook
-import csv
-# import pandas as pd
-from yandexfreetranslate import YandexFreeTranslate
 
-def fetch_quotes():
-    "Fetch quotes from the API and translate them to russian"
+def get_quotes(num_quotes):
+    #get quotes from API
     quotes = []
-    response = requests.get("https://api.chucknorris.io/jokes/random")
-    quote = response.json()["value"]
-    yt = YandexFreeTranslate(api = "ios")
-    rus_quote = yt.translate("en", "ru", quote)
-    quotes.append(rus_quote)
+    for _ in range(num_quotes):
+        response = requests.get("https://favqs.com/api/qotd")
+        quote = response.json()["quote"]["body"]
+        yt = YandexFreeTranslate(api = "ios")
+        rus_quote = yt.translate("en", "ru", quote)
+        quotes.append(rus_quote)
     return quotes
 
-def write_to_txt(quotes):
-    "Write quotes to a text file"
-    with open("quotes.txt", "w", encoding='utf-8') as file:
-        for quote in quotes:
-            file.write(quote)
-            file.write('\n')
+def save_quotes_to_excel(data, file_path):
+    #write quotes to excel file
+    df = pd.DataFrame(data)
+    df.to_excel(file_path, index=False, header=False)
+    
+def save_quotes_to_csv(data, file_path):
+    #write quotes to csv file
+    df = pd.DataFrame(data)
+    df.to_csv(file_path, index=False, header=False, encoding='utf-8-sig')
 
-def write_to_excel(quotes):
-    "Write quotes to an Excel file"
-    ex_file = 'quotes.xlsx'
-    wb = load_workbook(ex_file)
-    ws = wb["Лист1"]
-    for row, quote in enumerate(quotes, start=1):
-        cell = ws.cell(row=row, column=1)
-        cell.value = quote
-        wb.save(ex_file)
-
-    wb.close()
-
-def write_to_csv(quotes):
-    "Write quotes to a CSV file"
-    with open("quotes.csv", "w", encoding='utf-8', newline='') as csv_file:
-        writer = csv.writer(csv_file)
-        for quote in quotes:
-            writer.writerow([quote])
+def save_quotes_to_txt(data, file_path):
+    #write quotes to txt file
+    df = pd.DataFrame(data)
+    df.to_csv(file_path, index=False, header=False)
 
 if __name__ == "__main__":
-    for _ in range(10):
-        quotes = fetch_quotes()
-        write_to_txt(quotes)
-        write_to_excel(quotes)
-        write_to_csv(quotes)
+    try:
+        num_quotes = 10 #quotes quantity
+        quotes = get_quotes(num_quotes)
+        
+        #file paths
+        file_path_excel = 'C:/NURSULTAN/Python/wb_tech/50_quotes/pandas_quotes/ex_result.xlsx' 
+        file_path_csv = 'C:/NURSULTAN/Python/wb_tech/50_quotes/pandas_quotes/csv_result.csv'
+        file_path_txt = 'C:/NURSULTAN/Python/wb_tech/50_quotes/pandas_quotes/txt_result.txt'
+        
+        save_quotes_to_excel(quotes, file_path_excel)
+        save_quotes_to_csv(quotes, file_path_csv)
+        save_quotes_to_txt(quotes, file_path_txt)
+    
+    except Exception as e:
+        print(e)
